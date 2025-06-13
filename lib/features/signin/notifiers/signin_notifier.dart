@@ -42,7 +42,7 @@ class SigninNotifier extends _$SigninNotifier {
       }
     } catch (e) {
       state = state.copyWith(
-        error: ErrorParser(message: '$e'),
+        error: ErrorParser(message: ['$e']),
         onSignSuccess: false,
       );
     }

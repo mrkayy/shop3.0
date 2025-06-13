@@ -15,7 +15,7 @@ class ProductServices {
   ) async {
     Response res = await _api.getProductsByCategoryID(id);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var products =
             (res.data as List)
                 .map((json) => ProductModel.fromJson(json))
@@ -23,7 +23,7 @@ class ProductServices {
         return (err: null, res: products);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
       return (err: error, res: null);
     }
     var error = res.data as ErrorParser;
@@ -33,12 +33,12 @@ class ProductServices {
   EitherErrorOrResponse<ProductModel?> fetchProductBySlug(String slug) async {
     Response res = await _api.getSingleProductBySlug(slug);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var product = ProductModel.fromJson(res.data);
         return (err: null, res: product);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
       return (err: error, res: null);
     }
     var error = res.data as ErrorParser;
@@ -50,12 +50,12 @@ class ProductServices {
   ) async {
     Response res = await _api.getSingleProductCategoriesBySlug(slug);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var product = CategoryModel.fromJson(res.data);
         return (err: null, res: product);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
       return (err: error, res: null);
     }
     var error = res.data as ErrorParser;
@@ -65,7 +65,7 @@ class ProductServices {
   EitherErrorOrResponse<List<CategoryModel>?> fetchCategories() async {
     Response res = await _api.category();
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var categories =
             (res.data as List)
                 .map((json) => CategoryModel.fromJson(json))
@@ -73,7 +73,7 @@ class ProductServices {
         return (err: null, res: categories);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
       return (err: error, res: null);
     }
     var error = res.data as ErrorParser;

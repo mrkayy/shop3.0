@@ -35,7 +35,12 @@ class SignupViewModelNotifier extends _$SignupViewModelNotifier {
     try {
       final signin = await UserAuthServices(
         getIt<AuthenticationInterface>(),
-      ).signinUser({'name': state.name, 'avatar': '','email': state.email!, 'password': state.password!});
+      ).signupNewUser({
+        'name': state.name,
+        'avatar': 'https://i.imgur.com/QkIa5tT.jpeg',
+        'email': state.email!,
+        'password': state.password!,
+      });
 
       loading();
 
@@ -44,9 +49,10 @@ class SignupViewModelNotifier extends _$SignupViewModelNotifier {
       } else {
         state = state.copyWith(error: signin.err, onSignupSuccess: false);
       }
-    } catch (e) {
+    } catch (e, stack) {
+      print('got here:: $e: ->$stack');
       state = state.copyWith(
-        error: ErrorParser(message: '$e'),
+        error: ErrorParser(message: ['$e']),
         onSignupSuccess: false,
       );
     }

@@ -58,7 +58,10 @@ class AppTheme {
       filled: true,
       fillColor: secondaryColor2,
       contentPadding: EdgeInsets.all(16),
-      border: InputBorder.none,
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(8),
+      ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide.none,
         borderRadius: BorderRadius.circular(8),

@@ -89,7 +89,7 @@ class DioRequestManager {
         data: ErrorParser(
           code: statusCode.toString(),
           message:
-              exp.message ??
+              exp.response?.data ??
               'Unable to connect to server, please check your internet',
         ),
         statusCode: statusCode,
@@ -98,7 +98,7 @@ class DioRequestManager {
         requestOptions: exp.requestOptions,
         headers: exp.response?.headers ?? Headers(),
         // todo: Refactor to use [Pattern Matchinig] to check for correct error received and react to it
-        data: ErrorParser(code: '400', message: 'Network connection timeout'),
+        data: ErrorParser(code: '400', message: ['Network connection timeout']),
         statusCode: 000,
       ),
 
@@ -107,8 +107,8 @@ class DioRequestManager {
         requestOptions: exp.requestOptions,
         headers: exp.response?.headers ?? Headers(),
         data: ErrorParser(
-          code: '000',
-          message: exp.message ?? 'An unknown error occurred',
+          code: statusCode.toString(),
+          message: exp.response?.data ?? 'An unknown error occurred',
         ),
         statusCode: statusCode,
       ),
@@ -118,7 +118,7 @@ class DioRequestManager {
         headers: exp.response?.headers ?? Headers(),
         data: ErrorParser(
           code: statusCode.toString(),
-          message: exp.message ?? 'An unknown error occurred',
+          message: exp.response?.data ?? 'An unknown error occurred',
         ),
         statusCode: statusCode,
       ),
@@ -127,8 +127,8 @@ class DioRequestManager {
         requestOptions: exp.requestOptions,
         headers: exp.response?.headers ?? Headers(),
         data: ErrorParser(
-          code: '000',
-          message: exp.message ?? 'An unknown error occurred',
+          code: statusCode.toString(),
+          message: exp.response?.data ?? 'An unknown error occurred',
         ),
         statusCode: statusCode,
       ),

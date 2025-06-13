@@ -14,12 +14,12 @@ class UserProfileServices {
   ) async {
     Response res = await _api.updateUserProfile(data);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var jsonModel = UserProfileModel.fromJson(res.data);
         return (err: null, res: jsonModel);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
 
       return (err: error, res: null);
     }
@@ -33,12 +33,12 @@ class UserProfileServices {
   ) async {
     Response res = await _api.getUserProfile();
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var jsonModel = UserProfileModel.fromJson(res.data);
         return (err: null, res: jsonModel);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
 
       return (err: error, res: null);
     }

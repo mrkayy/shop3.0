@@ -41,6 +41,7 @@ class SignupView extends ConsumerWidget {
         }
       },
     );
+    final stateRef = ref.watch(signupViewModelNotifierProvider);
     final readRef = ref.read(signupViewModelNotifierProvider.notifier);
     final theme = Theme.of(context);
     return Scaffold(
@@ -78,7 +79,7 @@ class SignupView extends ConsumerWidget {
                   },
                   validator: (v) {
                     if (v!.isEmpty) {
-                      'invalid name.';
+                      return 'invalid name.';
                     }
                     return null;
                   },
@@ -92,7 +93,7 @@ class SignupView extends ConsumerWidget {
                   },
                   validator: (v) {
                     if (v!.isEmpty) {
-                      'invalid email address.';
+                      return 'invalid email address.';
                     }
                     return null;
                   },
@@ -128,14 +129,16 @@ class SignupView extends ConsumerWidget {
                 ),
                 24.verticalSpace,
                 ElevatedButton(
-                  onPressed: () {
-                    var form = _form.currentState!;
-                    if (form.validate()) {
-                      form.save();
-                      //
-                      readRef.signup();
-                    }
-                  },
+                  onPressed:
+                      !stateRef.loading!
+                          ? null
+                          : () async {
+                            final form = _form.currentState!;
+                            if (form.validate()) {
+                              form.save();
+                              readRef.signup();
+                            }
+                          },
                   child: Text('Sign Up'),
                 ),
                 40.verticalSpace,

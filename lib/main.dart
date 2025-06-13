@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shop3/core/app_config.dart';
 import 'package:shop3/core/services/native_services/ios_platform_channel.dart';
+import 'package:shop3/core/services/repository_services/cache_service.dart';
 import 'package:shop3/di_manager.dart';
 import 'package:shop3/routes/app_router.dart';
 import 'package:shop3/theme.dart';
@@ -25,9 +26,12 @@ void main() {
     serviceLocatorInitializer(config),
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
   ]).then((_) async {
+    final cache = await CacheService.getInstance();
+    var s = await cache.getString('profile');
     final nativePlatform = await NativeMethodChannelPlatform();
     final deviceInfo = await nativePlatform.getNavtivePlatformDeviceInfo();
 
+    debugPrint('USER:::: $s');
     debugPrint('Device_Info:::: $deviceInfo');
     runApp(ProviderScope(child: MainApp()));
   });

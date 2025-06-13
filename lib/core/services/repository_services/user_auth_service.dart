@@ -18,7 +18,7 @@ class UserAuthServices {
   ) async {
     Response res = await _api.signupNewUser(data);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var jsonModel = UserSignupModel.fromJson(res.data);
 
         final cache = await CacheService.getInstance();
@@ -26,13 +26,13 @@ class UserAuthServices {
         await cache.setString('profile', json.encode(res.data));
         return (err: null, res: jsonModel);
       }
-    } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+    } catch (e, stk) {
+      var error = ErrorParser(code: '000', message: ['$e->$stk']);
 
       return (err: error, res: null);
     }
 
-    var error = ErrorParser.fromJson(res.data);
+    var error = res.data as ErrorParser;
     return (err: error, res: null);
   }
 
@@ -41,7 +41,7 @@ class UserAuthServices {
   ) async {
     Response res = await _api.signinUser(data);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var jsonModel = UserSignInModel.fromJson(res.data);
 
         final cache = await CacheService.getInstance();
@@ -50,29 +50,28 @@ class UserAuthServices {
         return (err: null, res: jsonModel);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
-    print('got here');
+      var error = ErrorParser(code: '000', message: ['$e']);
       return (err: error, res: null);
     }
 
-    var error = ErrorParser.fromJson(res.data);
+    var error = res.data as ErrorParser;
     return (err: error, res: null);
   }
 
   EitherErrorOrResponse<bool?> emailCanSignup(RequestPayload data) async {
     Response res = await _api.isUserEmailAvaliable(data);
     try {
-      if (res.statusCode! >= 200) {
+      if (res.statusCode! >= 200 && res.statusCode! <= 300) {
         var result = res.data['isAvailable'] as bool;
         return (err: null, res: result);
       }
     } catch (e) {
-      var error = ErrorParser(code: '000', message: '$e');
+      var error = ErrorParser(code: '000', message: ['$e']);
 
       return (err: error, res: null);
     }
 
-    var error = ErrorParser.fromJson(res.data);
+    var error = res.data as ErrorParser;
     return (err: error, res: null);
   }
 }

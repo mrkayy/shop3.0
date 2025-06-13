@@ -1,5 +1,5 @@
 {
-    "baseUrl":"",
-    "version":"",
-    "secete":""
+    "baseUrl":"https://api.escuelajs.co/api/",
+    "version":"v1",
+    "secete":"shop3.0v1.0"
 }
