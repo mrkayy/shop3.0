@@ -23,7 +23,9 @@ GlobalKey<NavigatorState> get navigatorKey => _rootNavigatorKey;
 
 class ApplicationRoutes {
   GoRouter get getRoutesConfig => _router;
-  static final ValueNotifier<bool> _refreshNotifier = ValueNotifier<bool>(false);
+  static final ValueNotifier<bool> _refreshNotifier = ValueNotifier<bool>(
+    false,
+  );
   //
   static final GoRouter _router = GoRouter(
     refreshListenable: _refreshNotifier,
@@ -73,6 +75,7 @@ class ApplicationRoutes {
       GoRoute(
         path: signupView,
         builder: (context, state) => SignupView(),
+
         /// This function is used to redirect the user based on whether they have registered or not.
         /// It checks if the 'hasRegister' flag is stored in the cache.
         /// If the user has registered, they are redirected to the sign-in view.
@@ -94,7 +97,8 @@ class ApplicationRoutes {
       GoRoute(
         path: productsDetailsView,
         builder: (context, state) {
-          return ProductDetailView();
+          final pid = state.uri.queryParameters['id'];
+          return ProductDetailView(pid: pid);
         },
       ),
     ],

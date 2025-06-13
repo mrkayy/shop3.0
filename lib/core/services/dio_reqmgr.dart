@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shop3/core/app_config.dart';
+import 'package:shop3/core/services/endpoints.dart';
 import 'package:shop3/core/services/error_parser.dart';
+import 'package:shop3/core/services/repository_services/cache_service.dart';
 import 'package:shop3/di_manager.dart';
 // ...existing code...
 
@@ -16,7 +18,7 @@ class DioRequestManager {
   final _defaultHeaders = {'Content-Type': 'application/json'};
 
   /// dio initialization function
-  void initBaseOptions() {
+  void initBaseOptions() async {
     String baseUrl = getIt<AppConfig>().apiUrl;
     final options = BaseOptions(
       baseUrl: baseUrl,
@@ -25,9 +27,32 @@ class DioRequestManager {
       followRedirects: false,
     );
 
-    // dio request
+    final cache = await CacheService.getInstance();
+    var token = await cache.getString('authToken') ?? '';
+
     _dio!.options = options;
-    // _dio!.interceptors.add();
+    /// Adds an interceptor to the Dio client to handle requests, errors, and responses.
+    ///
+    /// The interceptor injects the access token into the headers for requests to the user profile endpoint.
+    /// It also handles errors and responses by passing them to the next interceptor in the chain.
+    _dio!.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path.contains(Endpoints.userProfile)) {
+            // Inject the access token into the headers
+            options.headers['Authorization'] = 'Bearer $token';
+            return handler.next(options);
+          }
+          return handler.next(options);
+        },
+        onError: (DioException e, handler) {
+          return handler.next(e);
+        },
+        onResponse: (response, handler) {
+          return handler.next(response);
+        },
+      ),
+    );
   }
 
   static void setCancelToken(CancelToken token) {

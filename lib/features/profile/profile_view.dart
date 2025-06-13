@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shop3/core/services/repository_services/cache_service.dart';
+import 'package:shop3/routes/app_router.dart';
+import 'package:shop3/theme.dart';
 
 final Color aColor = Colors.grey[800]!;
 
@@ -11,7 +15,12 @@ class ProfileView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Icon(Icons.arrow_back, color: aColor),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: Icon(Icons.person, color: AppTheme.textColor200),
+        ),
         title: Text('Profile', style: TextStyle(color: aColor)),
         centerTitle: true,
       ),
@@ -81,14 +90,14 @@ class ProfileView extends StatelessWidget {
           const SizedBox(height: 40),
           // Logout Button
           ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: aColor,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
+            onPressed: () async {
+              final cache = await CacheService.getInstance();
+              var signout = await cache.remove('authToken');
+              await cache.setBool('isLoggedIn', false);
+              if (signout) {
+                context.go(rootView);
+              }
+            },
             child: const Text(
               'Logout',
               style: TextStyle(fontSize: 16, color: Colors.white),

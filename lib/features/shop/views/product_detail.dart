@@ -7,7 +7,9 @@ import 'package:shop3/theme.dart';
 final Color aColor = Colors.grey[600]!;
 
 class ProductDetailView extends StatelessWidget {
-  const ProductDetailView({super.key});
+  ProductDetailView({super.key, this.pid});
+
+  final String? pid;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class ProductDetailView extends StatelessWidget {
           onPressed: () {
             context.pop();
           },
-          icon: Icon(Icons.arrow_back, color: AppTheme.textColor200),
+          icon: Icon(Icons.person_outline, color: AppTheme.textColor200),
         ),
         actions: [
           Padding(

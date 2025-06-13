@@ -35,7 +35,7 @@ class _ProductsHomeViewState extends ConsumerState<ProductsHomeView> {
   @override
   Widget build(BuildContext context) {
     final stateRef = ref.watch(productsHomeViewModelNotifierProvider);
-    final readRef = ref.read(productsHomeViewModelNotifierProvider.notifier);
+    // final readRef = ref.read(productsHomeViewModelNotifierProvider.notifier);
     final categoryRef = ref.watch(fetchCategoriesProvider);
     final productsRef = ref.watch(
       fetchProductsFromCategoriesProvider(stateRef.category?.id ?? 1),
@@ -44,16 +44,27 @@ class _ProductsHomeViewState extends ConsumerState<ProductsHomeView> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(Icons.location_on_outlined, color: aColor),
+        leading: IconButton(
+          onPressed: () {
+            context.push(profileView);
+          },
+          icon: Icon(Icons.settings_outlined, color: AppTheme.secondaryColor),
+        ),
         title: Text(
           'Shop3.0',
-          style: TextStyle(color: aColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: AppTheme.secondaryColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: Icon(Icons.notifications_outlined, color: aColor),
+            child: Icon(
+              Icons.notifications_outlined,
+              color: AppTheme.secondaryColor,
+            ),
           ),
         ],
       ),
