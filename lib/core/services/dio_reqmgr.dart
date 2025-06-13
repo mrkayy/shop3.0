@@ -27,32 +27,39 @@ class DioRequestManager {
       followRedirects: false,
     );
 
-    final cache = await CacheService.getInstance();
-    var token = await cache.getString('authToken') ?? '';
-
     _dio!.options = options;
+
     /// Adds an interceptor to the Dio client to handle requests, errors, and responses.
     ///
     /// The interceptor injects the access token into the headers for requests to the user profile endpoint.
     /// It also handles errors and responses by passing them to the next interceptor in the chain.
-    _dio!.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          if (options.path.contains(Endpoints.userProfile)) {
-            // Inject the access token into the headers
-            options.headers['Authorization'] = 'Bearer $token';
+    _dio!.interceptors
+      ..add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) async {
+            final cache = await CacheService.getInstance();
+            var token = await cache.getString('authToken') ?? '';
+            if (options.path.contains(Endpoints.userProfile)) {
+              // Inject the access token into the headers
+              options.headers['Authorization'] = 'Bearer $token';
+              return handler.next(options);
+            }
             return handler.next(options);
-          }
-          return handler.next(options);
-        },
-        onError: (DioException e, handler) {
-          return handler.next(e);
-        },
-        onResponse: (response, handler) {
-          return handler.next(response);
-        },
-      ),
-    );
+          },
+        ),
+      )
+      ..add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            debugPrint('onResponse: ${options.data}');
+            return handler.next(options);
+          },
+          onResponse: (response, handler) {
+            debugPrint('onResponse: ${response.data}');
+            return handler.next(response);
+          },
+        ),
+      );
   }
 
   static void setCancelToken(CancelToken token) {
