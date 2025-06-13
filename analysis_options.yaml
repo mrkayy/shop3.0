@@ -1,0 +1,18 @@
+linter:
+  rules:
+    - prefer_single_quotes
+    - camel_case_types
+    - sized_box_shrink_expand
+    - unnecessary_brace_in_string_interps
+
+
+analyzer:
+  errors:
+    file_names: error
+    prefer_single_quotes: error
+    sized_box_shrink_expand: warning
+    unnecessary_brace_in_string_interps: warning
+
+
+exclude:
+  - lib/**.g.dart
